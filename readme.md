@@ -1,18 +1,16 @@
-# MIT91207 — Machine Learning
-## Assignment 1 — Final Submission Answer Sheet
+## MIT91207 — 09 Machine Learning
 
-> **Student:** Victor Isingizwe Munezero  
+
 > **Course:** MIT91207 — Machine Learning  
-> **Assignment:** Assignment 1  
+> **Assignment:** Assignment 1
 >
 > **Note:** The answers below are written for direct submission. Code is included where requested. Numerical results are reported only where they can be supported by the supplied data.
 
 ---
 
 # Question 1 — Early-Warning System for At-Risk Students
-**[12 Marks]**
 
-## (a) Problem formulation — [5 Marks]
+## (a) Problem formulation
 
 The university's problem can be formulated as a **supervised machine-learning prediction problem**. Student information such as attendance, previous grades, assessment scores, extracurricular participation and LMS engagement can be used as input features \(X\) to predict an academic outcome \(y\).
 
@@ -38,7 +36,7 @@ Therefore:
 
 ---
 
-## (b) Two modelling approaches — [5 Marks]
+## (b) Two modelling approaches
 
 ### 1. Classification — Logistic Regression
 
@@ -62,7 +60,7 @@ Thus, logistic regression directly predicts academic risk, while Ridge regressio
 
 ---
 
-## (c) Two factors beyond predictive accuracy — [2 Marks]
+## (c) Two factors beyond predictive accuracy
 
 ### 1. Fairness and bias
 
@@ -75,9 +73,8 @@ Academic advisors should be able to understand the factors contributing to a stu
 ---
 
 # Question 2 — Course-Recommendation Preprocessing
-**[13 Marks]**
 
-## (a) Preprocessing pipeline — [5 Marks]
+## (a) Preprocessing pipeline
 
 ### 1. Missing ratings
 
@@ -113,7 +110,7 @@ Scaling prevents variables with larger numerical ranges from disproportionately 
 
 ---
 
-## (b) Python/pandas implementation — [5 Marks]
+## (b) Python/pandas implementation
 
 ```python
 import pandas as pd
@@ -173,7 +170,7 @@ In a real machine-learning workflow, the scaler and imputation statistics should
 
 ---
 
-## (c) Two engineered features — [2 Marks]
+## (c) Two engineered features
 
 ### 1. Course-completion rate
 
@@ -205,9 +202,8 @@ For timestamped recommendation data, chronological training, validation and test
 ---
 
 # Question 3 — Missing Data in Loan-Default Prediction
-**[13 Marks]**
 
-## (a) Critique of zero-imputation — [5 Marks]
+## (a) Critique of zero-imputation
 
 Replacing every missing numerical value with zero is inappropriate because **zero is often a meaningful financial value**, whereas a missing value means that the actual value is unknown.
 
@@ -231,7 +227,7 @@ The key distinction is:
 
 ---
 
-## (b) Improved missing-data strategy — [3 Marks]
+## (b) Improved missing-data strategy
 
 The strategy should depend on both the variable type and the reason for missingness.
 
@@ -243,7 +239,7 @@ If the missingness mechanism is systematic, simple imputation should be treated 
 
 ---
 
-## (c) Python function — [3 Marks]
+## (c) Python function
 
 ```python
 import pandas as pd
@@ -282,7 +278,7 @@ For production use, the imputation values should be learned from the training se
 
 ---
 
-## (d) Consequences for model performance and fairness — [2 Marks]
+## (d) Consequences for model performance and fairness
 
 Inappropriate missing-data treatment can distort the relationships learned by the model and reduce predictive performance, including discrimination and calibration.
 
@@ -293,9 +289,8 @@ Therefore, poor missing-data treatment can create both **statistical errors and 
 ---
 
 # Question 4 — Feature Engineering for Subscription Renewal
-**[12 Marks]**
 
-## (a) Feature-engineering pipeline — [3 Marks]
+## (a) Feature-engineering pipeline
 
 For numerical variables such as age, monthly expenditure, previous transactions and account duration, I would standardise the variables when using scale-sensitive algorithms such as logistic regression, SVM or k-nearest neighbours.
 
@@ -308,7 +303,7 @@ The preprocessing should be fitted on the training data and incorporated into a 
 
 ---
 
-## (b) Encoding consequences — [4 Marks]
+## (b) Encoding consequences
 
 ### One-hot encoding
 
@@ -340,7 +335,7 @@ to a nominal variable is generally inappropriate because it creates a false orde
 
 ---
 
-## (c) Python implementation — [3 Marks]
+## (c) Python implementation
 
 ```python
 import pandas as pd
@@ -405,7 +400,7 @@ print(X_ready)
 
 ---
 
-## (d) Ensuring deployment consistency — [2 Marks]
+## (d) Ensuring deployment consistency
 
 The preprocessing transformations should be fitted on the training data and saved as part of the same pipeline as the model.
 
@@ -418,9 +413,8 @@ This ensures that the model receives the same feature representation during trai
 ---
 
 # Question 5 — Hospital Readmission Prediction
-**[13 Marks]**
 
-## (a) End-to-end ML workflow — [4 Marks]
+## (a) End-to-end ML workflow
 
 A suitable machine-learning workflow is:
 
@@ -458,7 +452,7 @@ Integrate the model into the hospital information system, monitor model performa
 
 ---
 
-## (b) Data partitioning — [3 Marks]
+## (b) Data partitioning
 
 The data should preferably be split **chronologically**, with earlier admissions used for training and later admissions used for validation and testing. This better represents the real deployment situation in which the model predicts future admissions.
 
@@ -468,7 +462,7 @@ A careless random row-level split can allow information from the same patient to
 
 ---
 
-## (c) High overall accuracy but subgroup differences — [3 Marks]
+## (c) High overall accuracy but subgroup differences
 
 High overall accuracy does not guarantee reliable performance for every patient group.
 
@@ -486,7 +480,7 @@ The appropriate metric depends on the consequences of false positives and false 
 
 ---
 
-## (d) Python partitioning — [3 Marks]
+## (d) Python partitioning
 
 ```python
 import pandas as pd
@@ -528,9 +522,8 @@ This approach combines a future holdout with patient-level grouping.
 ---
 
 # Question 6 — Crime-Rate Prediction
-**[13 Marks]**
 
-## (a) Feature-selection strategy — [3 Marks]
+## (a) Feature-selection strategy
 
 I would use the following feature-selection procedure:
 
@@ -550,7 +543,7 @@ The key principles are:
 
 ---
 
-## (b) Exploratory analysis and correlation matrix — [6 Marks]
+## (b) Exploratory analysis and correlation matrix
 
 ```python
 import pandas as pd
@@ -618,7 +611,7 @@ However, correlation should not be used as the only feature-selection criterion 
 
 ---
 
-## (c) Multicollinearity — [2 Marks]
+## (c) Multicollinearity
 
 Highly correlated predictors can cause **multicollinearity**.
 
@@ -638,7 +631,7 @@ Possible solutions include:
 
 ---
 
-## (d) Government recommendations — [2 Marks]
+## (d) Government recommendations
 
 Variables that are statistically associated with crime can be used as **predictive indicators** for identifying areas that may require further analysis or resource planning.
 
@@ -651,9 +644,8 @@ Therefore, predictive associations can support planning and prioritisation, but 
 ---
 
 # Question 7 — ETA Prediction for YEGO
-**[14 Marks]**
 
-## (a) Experimental procedure — [3 Marks]
+## (a) Experimental procedure
 
 I would compare OLS, Ridge and Lasso using the same experimental procedure:
 
@@ -669,7 +661,7 @@ I would compare OLS, Ridge and Lasso using the same experimental procedure:
 
 ---
 
-## (b) Python implementation and results — [6 Marks]
+## (b) Python implementation and results
 
 ```python
 import pandas as pd
@@ -851,9 +843,9 @@ print(
 
 ### Test-set results
 
-| Model | MAE | RMSE | R² |
-|---|---:|---:|---:|
-| OLS | 4.380 | 6.237 | 0.800 |
+| Model |   MAE |  RMSE |    R² |
+| ----- | ----: | ----: | ----: |
+| OLS   | 4.380 | 6.237 | 0.800 |
 | Ridge | 4.378 | 6.235 | 0.800 |
 | Lasso | 4.358 | 6.226 | 0.801 |
 
@@ -866,7 +858,7 @@ The three models therefore have very similar predictive performance.
 
 ---
 
-## (c) Model choice — [2 Marks]
+## (c) Model choice
 
 Lasso is a reasonable model choice because it provides predictive performance comparable to OLS and Ridge while also shrinking coefficients and potentially setting some coefficients exactly to zero.
 
@@ -880,7 +872,7 @@ The appropriate conclusion is:
 
 ---
 
-## (d) Reducing overfitting — [3 Marks]
+## (d) Reducing overfitting
 
 ### 1. Cross-validation and a strictly held-out test set
 
@@ -895,9 +887,8 @@ The final model should also be evaluated on genuinely new journeys. For time-dep
 ---
 
 # Question 8 — Customer Survey Analysis
-**[12 Marks]**
 
-## (a) EDA strategy — [3 Marks]
+## (a) EDA strategy
 
 I would begin with a data-quality assessment by checking:
 
@@ -925,7 +916,7 @@ Finally, I would compare customer segments to identify groups with substantially
 
 ---
 
-## (b) Python visualisations — [4 Marks]
+## (b) Python visualisations
 
 ```python
 import pandas as pd
@@ -1012,7 +1003,7 @@ The specific patterns should be reported only after running the code on the actu
 
 ---
 
-## (c) Two insights for management — [3 Marks]
+## (c) Two insights for management
 
 The analysis should identify at least two decision-relevant insights.
 
@@ -1028,7 +1019,7 @@ The actual numerical segments and values should only be reported after analysing
 
 ---
 
-## (d) One limitation — [2 Marks]
+## (d) One limitation
 
 A major limitation is that **stated willingness to purchase is not necessarily the same as actual purchasing behaviour**.
 
@@ -1078,4 +1069,3 @@ The most important principles across the assignment are:
 9. **Ridge uses L2 regularisation; Lasso uses L1 regularisation and can perform feature selection.**
 10. **MAE and RMSE are lower-is-better metrics; \(R^2\) is generally higher-is-better.**
 11. **Survey intention is weaker evidence than observed purchasing behaviour.**
-
