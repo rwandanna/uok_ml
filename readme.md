@@ -1069,3 +1069,1164 @@ The most important principles across the assignment are:
 9. **Ridge uses L2 regularisation; Lasso uses L1 regularisation and can perform feature selection.**
 10. **MAE and RMSE are lower-is-better metrics; \(R^2\) is generally higher-is-better.**
 11. **Survey intention is weaker evidence than observed purchasing behaviour.**
+
+
+
+
+------------
+
+
+-----------
+
+
+Yes. You do **not** need to learn the whole module in 10 minutes. You need a mental map of what each question is testing and a few reusable phrases/code patterns.
+
+Here is your **10-minute emergency sheet**. Read it once from top to bottom, then go back to the questions you find hardest.
+
+---
+
+# 1. THE CORE ML IDEA
+
+Almost every question here follows:
+
+**Data → clean → transform → features → split → train model → predict → evaluate → deploy**
+
+And remember:
+
+### Supervised learning
+
+You have **inputs + known target/output**.
+
+Example:
+
+> Attendance, grades, LMS activity → **at-risk / not-at-risk**
+
+The model learns from examples where the correct answer is already known.
+
+Two major types:
+
+**Classification** → predicts a category.
+
+* Yes/no
+* Default/not default
+* At risk/not at risk
+* Renew/not renew
+
+**Regression** → predicts a number.
+
+* GPA = 2.8
+* ETA = 35 minutes
+* Crime rate = 450 per 100,000
+* House price = $100,000
+
+### Unsupervised learning
+
+There is **no known target**.
+
+The model tries to discover patterns/groups by itself.
+
+Example:
+
+> Customer data → discover groups of similar customers.
+
+Common example: **clustering** such as K-Means.
+
+### Memorize this:
+
+> **Classification = class/category**
+> **Regression = number**
+> **Unsupervised = no target; find patterns**
+
+---
+
+# 2. LINEAR vs LOGISTIC vs RIDGE vs LASSO
+
+This is extremely important because Q1 and Q7 directly test it.
+
+### Linear Regression
+
+Predicts a **continuous number**.
+
+Example:
+
+> Distance + traffic + weather → ETA = **32.5 minutes**
+
+Basic idea:
+
+> Find a line that best fits the data and use it to predict a number.
+
+Use it for:
+
+* ETA
+* GPA
+* sales
+* price
+* temperature
+
+---
+
+### Logistic Regression
+
+Despite having "regression" in its name, it is primarily used for **classification**.
+
+Example:
+
+> Attendance + grades + LMS → probability of being at risk = **0.82**
+
+Then:
+
+> 0.82 > threshold → **At Risk**
+
+Use it for:
+
+* default / no default
+* sick / healthy
+* churn / no churn
+* at-risk / not at-risk
+
+### Memorize:
+
+> **Linear → number**
+> **Logistic → category/probability**
+
+---
+
+### Ridge Regression
+
+Ridge is basically **Linear Regression + penalty for large coefficients**.
+
+Why?
+
+Suppose predictors are highly correlated:
+
+> journey distance
+> journey duration
+> previous journey time
+
+They may contain overlapping information.
+
+Ordinary Linear Regression can become unstable when predictors are highly correlated.
+
+Ridge adds a penalty that **shrinks coefficients toward zero**, making the model more stable and reducing overfitting.
+
+**Important:** Ridge normally does **not** make coefficients exactly zero.
+
+---
+
+### Lasso Regression
+
+Lasso also adds a penalty, but it can shrink some coefficients **exactly to zero**.
+
+Therefore Lasso can perform **feature selection**.
+
+Example:
+
+You have 20 predictors.
+
+Lasso might effectively retain:
+
+> distance, traffic, time of day
+
+while making several unhelpful coefficients zero.
+
+### Memorize this:
+
+> **Ridge = shrink coefficients**
+> **Lasso = shrink + can remove features**
+
+And:
+
+> **OLS Linear Regression = ordinary baseline**
+> **Ridge = useful when predictors are correlated**
+> **Lasso = useful when you want feature selection**
+
+---
+
+# 3. QUESTION 1 — UNIVERSITY
+
+The examiner wants you to recognize **classification vs regression**.
+
+### a)
+
+Inputs:
+
+> attendance, previous grades, assessments, LMS engagement, etc.
+
+Target:
+
+> **At risk / Not at risk**
+
+Therefore:
+
+> **Classification**
+
+But regression is also possible if target is:
+
+> predicted GPA / final mark.
+
+### b)
+
+Classification:
+
+> Logistic Regression → probability of being at risk → intervention if probability exceeds threshold.
+
+Regression:
+
+> Linear Regression → predicted GPA → intervention if predicted GPA is below threshold.
+
+### c)
+
+Don't only say accuracy.
+
+Two easy factors:
+
+**Fairness/bias**
+
+> Model may unfairly disadvantage certain student groups because historical data may contain bias.
+
+**Explainability**
+
+> Advisors need to understand why a student was classified as high risk instead of blindly trusting the prediction.
+
+Memorize:
+
+> **Accuracy tells us whether predictions are correct. Fairness tells us whether decisions are equitable. Explainability tells us whether humans can understand and appropriately use the prediction.**
+
+---
+
+# 4. QUESTION 2 — DATA PREPROCESSING
+
+This question is basically:
+
+> "The dataset is messy. What do you do before ML?"
+
+They give you:
+
+* missing ratings
+* duplicates
+* inconsistent categories
+* different numerical scales
+
+Your pipeline:
+
+**Inspect → clean → handle missing values → remove duplicates → standardize categories → encode categorical variables → scale numerical variables → create useful features → train**
+
+### Missing values
+
+Don't automatically replace everything with zero.
+
+For ratings:
+
+> median/mean/imputation depending on situation.
+
+Could also create:
+
+> `rating_missing = 1`
+
+if missingness itself may contain information.
+
+### Duplicates
+
+Remove duplicate records.
+
+### Inconsistent categories
+
+For example:
+
+> "Computer Science"
+> "computer science"
+> "Comp Sci"
+
+Standardize them into:
+
+> "Computer Science"
+
+### Different scales
+
+Example:
+
+> Age = 20–60
+> Number of courses = 1–100
+> rating = 1–5
+
+Use **standardization/scaling**, especially for algorithms sensitive to scale.
+
+### Q2(b) — Python
+
+You don't need complicated code. Know this pattern:
+
+```python
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+
+# Remove duplicates
+df = df.drop_duplicates()
+
+# Fill missing numerical values
+df["rating"] = df["rating"].fillna(df["rating"].median())
+
+# Standardize category names
+df["category"] = df["category"].str.strip().str.lower()
+
+# Feature engineering
+df["completed"] = df["completion_status"].map({"Completed": 1, "Not Completed": 0})
+```
+
+That's already several operations.
+
+### Q2(c): useful behavioural features
+
+Think:
+
+**How active is the learner?**
+
+Examples:
+
+> `courses_taken`
+
+> `completion_rate`
+
+> `average_rating`
+
+> `number_of_completed_courses`
+
+Why useful?
+
+Because they represent learner behaviour better than simply using learner ID.
+
+### Q2(d): future information
+
+This is **data leakage**.
+
+Memorize:
+
+> **Training data must only contain information that would have been available at the time the prediction was made.**
+
+With timestamps:
+
+> Train on earlier records, test on later records.
+
+---
+
+# 5. QUESTION 3 — MISSING VALUES
+
+This is mostly testing whether you understand why:
+
+> **missing ≠ zero**
+
+Suppose income is missing.
+
+Zero income means:
+
+> Person earns nothing.
+
+Missing income means:
+
+> We don't know their income.
+
+Those are completely different.
+
+If you replace missing income with zero, the model may think:
+
+> missing-income customer = extremely poor customer.
+
+That can produce wrong credit decisions.
+
+### Better strategy
+
+Numerical:
+
+> median/mean imputation depending on distribution.
+
+Categorical:
+
+> mode or `"Unknown"`.
+
+Important variables:
+
+> investigate why they are missing.
+
+For example:
+
+> Missing credit history could mean the customer has no recorded history, not necessarily bad credit.
+
+### Python function
+
+Something like:
+
+```python
+def handle_missing(df):
+    numerical = df.select_dtypes(include="number").columns
+    categorical = df.select_dtypes(exclude="number").columns
+
+    for col in numerical:
+        df[col] = df[col].fillna(df[col].median())
+
+    for col in categorical:
+        df[col] = df[col].fillna("Unknown")
+
+    return df
+```
+
+The assumption:
+
+> Numerical missing values can reasonably be represented by their median, while missing categorical information is represented as `"Unknown"`.
+
+### Q3(d)
+
+Bad missing-value treatment can cause:
+
+**Model problem:**
+
+> biased relationships and reduced predictive performance.
+
+**Decision problem:**
+
+> applicants may incorrectly be approved or rejected.
+
+---
+
+# 6. QUESTION 4 — CATEGORICAL + NUMERICAL
+
+This is one you should memorize.
+
+You have:
+
+### Numerical
+
+* age
+* expenditure
+* transactions
+* account duration
+
+### Categorical
+
+* subscription type
+* region
+* payment method
+* status
+
+You need to transform them.
+
+### Numerical → scaling
+
+Usually:
+
+> StandardScaler
+
+### Categorical → encoding
+
+Usually:
+
+> One-Hot Encoding
+
+For example:
+
+Payment:
+
+> Cash / Card / Mobile
+
+becomes something like:
+
+> Cash = [1,0,0]
+> Card = [0,1,0]
+> Mobile = [0,0,1]
+
+---
+
+# 7. ONE-HOT vs ORDINAL
+
+Very important.
+
+### One-hot encoding
+
+Use when categories have **no natural order**.
+
+Example:
+
+> Rwanda, Kenya, Uganda
+
+There isn't:
+
+> Rwanda < Kenya < Uganda
+
+So one-hot is appropriate.
+
+### Ordinal encoding
+
+Use when categories have a **real order**.
+
+Example:
+
+> Low < Medium < High
+
+Ordinal encoding:
+
+> Low = 1
+> Medium = 2
+> High = 3
+
+### Bad numerical encoding
+
+Suppose:
+
+> Rwanda = 1
+> Kenya = 2
+> Uganda = 3
+
+A model may interpret that as:
+
+> Uganda > Kenya > Rwanda
+
+But those numbers are just labels.
+
+That's why arbitrary numerical encoding can introduce a **false mathematical relationship**.
+
+### Memorize:
+
+> **No order → One-hot**
+> **Real order → Ordinal**
+> **Arbitrary numbers → dangerous because they imply order**
+
+---
+
+### Q4 Python
+
+Know this pattern:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "age": [20, 30, 40],
+    "spending": [100, 200, 150],
+    "subscription": ["Basic", "Premium", "Basic"],
+    "region": ["North", "South", "North"]
+})
+
+df_encoded = pd.get_dummies(
+    df,
+    columns=["subscription", "region"],
+    dtype=int
+)
+
+print(df_encoded)
+```
+
+If asked about scaling:
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+df_encoded[["age", "spending"]] = scaler.fit_transform(
+    df_encoded[["age", "spending"]]
+)
+```
+
+---
+
+# 8. QUESTION 5 — END-TO-END ML
+
+This is basically asking:
+
+> "Tell me the entire ML process."
+
+Memorize this chain:
+
+**1. Acquire data**
+
+↓
+
+**2. Clean data**
+
+↓
+
+**3. Explore data**
+
+↓
+
+**4. Engineer/select features**
+
+↓
+
+**5. Split data**
+
+↓
+
+**6. Train model**
+
+↓
+
+**7. Validate/tune**
+
+↓
+
+**8. Test**
+
+↓
+
+**9. Evaluate**
+
+↓
+
+**10. Deploy + monitor**
+
+That's your answer.
+
+### Why careless splitting is dangerous
+
+Suppose the same patient appears in both training and test.
+
+The model may effectively have already seen information about that patient.
+
+That's **data leakage**.
+
+Result:
+
+> Test performance looks excellent, but real-world performance is worse.
+
+---
+
+# 9. TRAIN / VALIDATION / TEST
+
+Think:
+
+### Training
+
+> Learn the model.
+
+### Validation
+
+> Choose/tune the model.
+
+### Test
+
+> Final unbiased evaluation.
+
+Typical example:
+
+> 70% train
+> 15% validation
+> 15% test
+
+Or:
+
+> 80% train / 20% test
+
+with cross-validation inside training.
+
+### Q5(c): accuracy isn't enough
+
+Especially because patient groups perform differently.
+
+Use:
+
+> Precision
+> Recall
+> F1-score
+> Confusion matrix
+> Sensitivity/specificity
+> Performance by demographic/group
+
+For medical risk prediction, **recall/sensitivity** can be particularly important because missing a genuinely high-risk patient can have serious consequences.
+
+---
+
+### Q5(d) Python
+
+Simple:
+
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+```
+
+`stratify=y` helps preserve class proportions.
+
+---
+
+# 10. QUESTION 6 — CORRELATION + FEATURE SELECTION
+
+Don't overthink this one.
+
+They want:
+
+> Which variables are useful for predicting crime?
+
+### Feature selection
+
+Look at:
+
+* correlation
+* domain knowledge
+* missingness
+* redundancy
+* model-based importance
+* statistical tests
+* validation performance
+
+Don't blindly keep variables just because correlation is high.
+
+### Correlation means:
+
+> Two variables move together.
+
+It **does NOT prove causation**.
+
+Example:
+
+> Higher police presence may correlate with higher crime.
+
+You cannot conclude:
+
+> Police cause crime.
+
+It could be because:
+
+> High-crime areas receive more police.
+
+This is a classic **association vs causation** issue.
+
+---
+
+# 11. CORRELATION MATRIX
+
+You can write:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("crime.csv")
+
+corr = df.corr(numeric_only=True)
+
+sns.heatmap(corr, annot=True, cmap="coolwarm")
+plt.show()
+```
+
+If they ask what you are looking for:
+
+> Strong positive correlation → variables tend to increase together.
+
+> Strong negative correlation → one tends to increase when the other decreases.
+
+> Near zero → weak linear relationship.
+
+But:
+
+> Correlation alone is not sufficient for feature selection because it only measures linear association and does not establish causation or necessarily capture predictive usefulness.
+
+---
+
+# 12. MULTICOLLINEARITY
+
+This is extremely important for Q6 and Q7.
+
+Imagine:
+
+> Income and annual income
+
+or:
+
+> Distance and travel distance
+
+are highly correlated.
+
+They contain similar information.
+
+This can create **multicollinearity**.
+
+For Linear Regression, this can make coefficient estimates:
+
+> unstable / difficult to interpret.
+
+Solutions:
+
+> remove one redundant variable
+
+or
+
+> combine them
+
+or
+
+> use Ridge Regression
+
+or
+
+> use feature-selection methods.
+
+Memorize:
+
+> **Highly correlated predictors → multicollinearity → unstable regression coefficients.**
+
+---
+
+# 13. QUESTION 7 — YEGO ETA
+
+This is the most important model comparison question.
+
+Target:
+
+> ETA = a number.
+
+Therefore:
+
+> **Regression problem.**
+
+Compare:
+
+### OLS Linear Regression
+
+Basic model.
+
+### Ridge
+
+Linear regression + coefficient penalty.
+
+Good when predictors are correlated.
+
+### Lasso
+
+Linear regression + penalty that can set coefficients to zero.
+
+Good when some variables may be unnecessary.
+
+---
+
+## Experimental procedure
+
+You can write:
+
+> First clean the dataset, handle missing values and categorical variables, and scale numerical features where appropriate. Then split the data into training and testing sets. Train OLS, Ridge and Lasso using the same training data. Tune Ridge/Lasso hyperparameters using cross-validation. Evaluate all models on the same unseen test set.
+
+Metrics:
+
+**MAE**
+
+> average absolute prediction error.
+
+If MAE = 4:
+
+> predictions are off by about 4 minutes on average.
+
+**RMSE**
+
+> penalizes larger errors more heavily.
+
+**R²**
+
+> indicates how much variation in ETA is explained by the model.
+
+### Memorize:
+
+> **MAE = average error**
+> **RMSE = punishes big errors**
+> **R² = explained variation**
+> Lower MAE/RMSE = better. Higher R² = better.
+
+---
+
+# 14. Q7 MODEL DECISION
+
+Don't say:
+
+> "Ridge is always best."
+
+Wrong.
+
+You choose based on:
+
+> predictive performance + complexity + stability + interpretability.
+
+If Ridge has:
+
+> MAE = 4.1
+
+and Lasso:
+
+> MAE = 4.2
+
+but Lasso uses far fewer predictors, you might prefer Lasso **if the small performance difference is acceptable and simpler deployment is valuable**.
+
+If Ridge has materially better performance and stable coefficients, Ridge may be preferable.
+
+The exam wants you to understand:
+
+> **Don't choose a model from one metric alone.**
+
+---
+
+# 15. OVERFITTING
+
+Overfitting means:
+
+> Model learns the training data too specifically, including noise, and performs poorly on unseen data.
+
+Ways to reduce it:
+
+### 1. Cross-validation
+
+Train/evaluate across multiple folds.
+
+### 2. Regularization
+
+Ridge/Lasso penalize complexity.
+
+### 3. Proper train/test separation
+
+Don't let test information influence training.
+
+### 4. Feature selection
+
+Remove unnecessary variables.
+
+### 5. More data
+
+If possible.
+
+Memorize:
+
+> **Overfitting = great on training data, poor on unseen data.**
+
+---
+
+# 16. QUESTION 8 — EDA
+
+EDA = **Exploratory Data Analysis**.
+
+Don't make it complicated.
+
+EDA asks:
+
+> What is in the data?
+
+> Is it clean?
+
+> What does the distribution look like?
+
+> Which variables are related?
+
+> Are there different customer groups?
+
+Your process:
+
+**Inspect → clean → summarize → visualize → investigate relationships → identify patterns → identify subgroups → generate insights**
+
+---
+
+# 17. WHICH GRAPH DO I USE?
+
+This is worth memorizing.
+
+### One numerical variable
+
+**Histogram**
+
+> age distribution
+
+### Numerical vs numerical
+
+**Scatter plot**
+
+> price vs willingness to purchase
+
+### Categorical vs numerical
+
+**Box plot**
+
+> satisfaction by occupation
+
+### Categorical vs categorical
+
+**Bar chart / stacked bar chart**
+
+> willingness to purchase by occupation
+
+### Time
+
+**Line chart**
+
+> satisfaction over time
+
+---
+
+# 18. Q8 INSIGHTS
+
+Don't just describe:
+
+> "60% said yes."
+
+That's a summary.
+
+They want a **decision-relevant insight**:
+
+> "Customers with previous experience using similar products show higher willingness to purchase, suggesting prior familiarity may be associated with stronger purchase intent."
+
+Then business implication:
+
+> "The company could investigate this segment further during product validation."
+
+Be careful:
+
+> association ≠ causation.
+
+---
+
+# 19. THE BIGGEST CHEAT SHEET
+
+If your brain retains nothing else, memorize this:
+
+```text
+SUPERVISED
+= target exists
+
+CLASSIFICATION
+= predicts category
+= yes/no, risk/no risk, default/no default
+= Logistic Regression
+
+REGRESSION
+= predicts number
+= GPA, ETA, price
+= Linear Regression
+
+UNSUPERVISED
+= no target
+= discover patterns/groups
+= clustering
+```
+
+```text
+LINEAR
+→ predicts number
+
+LOGISTIC
+→ predicts class/probability
+
+RIDGE
+→ regression + penalty
+→ handles correlated predictors
+→ shrinks coefficients
+
+LASSO
+→ regression + penalty
+→ can make coefficients ZERO
+→ feature selection
+```
+
+```text
+MISSING ≠ ZERO
+
+categorical without order
+→ ONE-HOT
+
+categorical with real order
+→ ORDINAL
+
+numerical
+→ SCALING when appropriate
+```
+
+```text
+TRAIN
+→ learn
+
+VALIDATION
+→ tune/choose
+
+TEST
+→ final evaluation
+```
+
+```text
+DATA LEAKAGE
+→ future/test information enters training
+→ artificially good results
+```
+
+```text
+OVERFITTING
+→ learns training data too well
+→ poor unseen performance
+```
+
+```text
+MULTICOLLINEARITY
+→ predictors highly correlated
+→ unstable regression coefficients
+→ remove/combine variables or use Ridge
+```
+
+```text
+MAE
+→ average error
+
+RMSE
+→ punishes large errors
+
+R²
+→ explained variation
+```
+
+```text
+CORRELATION
+→ association
+≠ causation
+```
+
+```text
+EDA
+
+Histogram → distribution
+Scatter → numerical vs numerical
+Boxplot → categorical vs numerical
+Bar chart → categorical comparisons
+```
+
+---
+
+# FINAL 2-MINUTE MEMORY MAP
+
+Look at each question and immediately translate it:
+
+**Q1:**
+University risk → **classification**, possibly regression.
+
+**Q2:**
+Messy recommendation data → **preprocessing + feature engineering + leakage**.
+
+**Q3:**
+Missing financial data → **missing ≠ zero + imputation + consequences**.
+
+**Q4:**
+Mixed data types → **encoding + scaling + consistent pipeline**.
+
+**Q5:**
+Healthcare system → **end-to-end ML + train/validation/test + fairness/metrics**.
+
+**Q6:**
+Crime dataset → **EDA + correlation + feature selection + multicollinearity + association ≠ causation**.
+
+**Q7:**
+ETA → **regression + Linear vs Ridge vs Lasso + MAE/RMSE/R² + overfitting**.
+
+**Q8:**
+Survey → **EDA + choose appropriate charts + insights + limitations**.
+
+And one universal answer structure will save you:
+
+> **Identify the problem → identify the data/target → choose the method → explain why → explain how the result is used → mention limitation/risk.**
+
+Don't try to memorize paragraphs. Memorize the **bold concepts and arrows** above, then explain them in your own words. That is enough to construct answers to these questions under exam conditions.
