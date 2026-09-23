@@ -4,35 +4,6 @@
 
 
 
-## Student Information
-
-
-
-| Field | Value |
-
-|---|---|
-
-| Student | Victor Isingizwe Munezero |
-
-| Registration Number | 26015486 |
-
-| Programme | Master of Information Technology |
-
-| Module | MIT91207: Machine Learning |
-
-| Lecturer | Dr. Gustave Udahemuka |
-
-| Level / Trimester | Level 9, Trimester 4 (Weekend) |
-
-| Total Marks | 80 (scaled to 15) |
-
-| Date | September 22, 2026 |
-
-
-
-> **How to use this document.** Every question below is answered directly first, exactly as the assignment asks. Underneath each answer you will find plain-language explanations, examples, real-world context, and — where the assignment supplies a dataset — the actual Python code that was run and the real output it produced (not an estimate). Sections used inconsistently across questions (Example, Case Study, Code) are included only where they genuinely help; every question still gets a direct **Answer**.
-
-
 
 > **Dataset verification statement.** Before Questions 4(b), 5, and 7 were answered, the three supplied files were inspected directly in pandas rather than assumed: `credit.csv` (1,000,000 rows × 8 columns, 8.74% fraud, no missing values), `home.csv` (307,511 rows × 122 columns, 8.07% TARGET rate, `ORGANIZATION_TYPE` confirmed at 58 categories, `NAME_EDUCATION_TYPE` confirmed ordinal with 5 levels), and `prices.csv` (1,460 rows × 81 columns, `SalePrice` present, multicollinearity confirmed: GrLivArea/TotRmsAbvGrd r = 0.825, GarageCars/GarageArea r = 0.882). Every figure below for these three questions comes from actually running the code shown against these files. This Markdown file, the submitted DOCX, and the accompanying `.ipynb` notebook all report the same numbers because they were generated from the same executed code.
 
